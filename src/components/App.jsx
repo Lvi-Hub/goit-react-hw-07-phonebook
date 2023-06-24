@@ -5,7 +5,7 @@ import { getTasks } from '../redux/selectors';
 
 export const App = () => {
   const dispatch = useDispatch();
-  const { items, isLoading, error, petro } = useSelector(getTasks);
+  const { items, isLoading, error } = useSelector(getTasks);
 
   useEffect(() => {
     dispatch(fetchTasks());
