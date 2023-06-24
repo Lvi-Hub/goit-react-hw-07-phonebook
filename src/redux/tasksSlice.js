@@ -28,4 +28,5 @@ const tasksSlice = createSlice({
 
 export const { fetchingInProgress, fetchingSuccess, fetchingError } =
   tasksSlice.actions;
+
 export const tasksReducer = tasksSlice.reducer;
