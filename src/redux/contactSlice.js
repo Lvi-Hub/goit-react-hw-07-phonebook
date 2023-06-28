@@ -1,22 +1,44 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { initialState } from './initialState';
+import { addContact, deleteContact, fetchContacts } from 'services/contactAPI';
+
+export function handlePending(state) {
+  state.isLoading = true;
+  state.error = null;
+}
+export function handleRejected(state, { payload }) {
+  state.error = payload;
+  state.isLoading = false;
+}
+export function handleContactFetch(state, { payload }) {
+  state.isLoading = false;
+  state.items = payload;
+}
+
+export function handleContactAdd(state, { payload }) {
+  state.isLoading = false;
+  state.items.push(payload);
+}
+export function handleDeleteContact(state, { payload }) {
+  state.isLoading = false;
+  state.items = state.items.filter(contact => contact.id !== payload.id);
+}
 
 const contactSlice = createSlice({
   name: 'contacts',
-  initialState: [
-    { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-    { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-    { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-    { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-  ],
-  reducers: {
-    addContact(state, action) {
-      state.push(action.payload);
-    },
-    removeContact(state, action) {
-      return state.filter(contact => contact.id !== action.payload);
-    },
+  initialState: initialState.contacts,
+  extraReducers: builder => {
+    builder
+      .addCase(fetchContacts.fulfilled, handleContactFetch)
+      .addCase(addContact.fulfilled, handleContactAdd)
+      .addCase(deleteContact.fulfilled, handleDeleteContact)
+      .addMatcher(action => {
+        action.type.endsWith('/pending');
+      }, handlePending)
+      .addMatcher(action => {
+        action.type.endsWith('/rejected');
+      }, handleRejected);
   },
 });
 
-export const { addContact, removeContact } = contactSlice.actions;
 export const contactReducer = contactSlice.reducer;
