@@ -2,7 +2,7 @@ import React from 'react';
 import css from './ContactForm.module.css';
 import { nanoid } from 'nanoid';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'services/contactAPI';
+import { addContact } from 'redux/contactOperation';
 import { getContacts } from 'redux/selector';
 
 export function ContactForm() {
@@ -24,6 +24,7 @@ export function ContactForm() {
     } else {
       dispatch(
         addContact({
+          createdAt: Date(),
           name: submitName.toString(),
           number: submitNumber.toString(),
           id: nanoid(),
