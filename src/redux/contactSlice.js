@@ -9,26 +9,21 @@ import {
 export function handlePending(state) {
   state.isLoading = true;
   state.error = null;
-  console.log(state.isLoading);
 }
 export function handleRejected(state, { payload }) {
-  console.log('handleRejected');
-  state.isLoading = true;
+  state.isLoading = false;
   state.error = payload;
 }
 export function handleFetchContact(state, { payload }) {
-  console.log('handleFetchContact');
   state.isLoading = false;
   state.items = payload;
 }
 
 export function handleAddContact(state, { payload }) {
-  console.log('handleAddContact');
   state.isLoading = false;
   state.items.push(payload);
 }
 export function handleDeleteContact(state, { payload }) {
-  console.log('handleDeleteContact');
   state.isLoading = false;
   state.items = state.items.filter(contact => contact.id !== payload.id);
 }
